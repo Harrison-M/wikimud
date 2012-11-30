@@ -1,0 +1,54 @@
+<!--
+  Derby templates are similar to Handlebars, except that they are first
+  parsed as HTML, and there are a few extensions to make them work directly
+  with models. A single HTML template defines the HTML output, the event
+  handlers that update the model after user interaction, and the event handlers
+  that update the DOM when the model changes.
+
+  As in Handlebars, double curly braces output a value literally. Derby
+  templates add single curly braces, which output a value and set up
+  model <- -> view bindings for that object.
+
+  Elements that end in colon define template names. Pre-defined templates
+  are capitalized by convention, but template names are case-insensitive.
+  Pre-defined templates are automatically included when the page is rendered.
+-->
+
+<Title:>
+  {{roomName}}
+
+<Header:>
+  <!-- This is a component defined in the /ui directory -->
+  <ui:connectionAlert>
+
+<Body:>
+  <div class="container">
+    <div class="row" id="player-info">
+      <label>Username:</label> <input value="{_user.name}" />
+    </div>
+    <div class="row">
+      <div class="col_8">
+        <h1>{_room.welcome}</h1>
+        <p><label>Room name: <input value="{_room.welcome}"></label></p>
+
+        <p><textarea rows="15" cols="100">{_room.content}</textarea></p>
+      </div>
+
+      <div class="col_4 last">
+        <h2>Pathways</h2>
+        <app:links>
+      </div>
+    </div>
+  </div>
+
+<links:>
+  <ul>
+    {#each _links}<app:link>{/}
+  </ul>
+  <form x-bind="submit:addLink">
+    <input type="text" value="{_newLink}" />
+    <input type="submit" value="Add" />
+  </form>
+
+<link:>
+  <li><a href="/{.room}">{.room}</a></li>

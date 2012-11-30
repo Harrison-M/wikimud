@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Object screen</title>
+    <link href="css/columnal.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+    <link href="css/smoothness/jquery-ui-1.9.1.custom.min.css" rel="stylesheet">
+
+    <script src="js/jquery-1.8.2.js" type="text/javascript"></script>
+    <script src="js/jquery-ui-1.9.1.custom.min.js" type="text/javascript"></script>
+    <script>
+      var taken = false;
+      $(document).ready(function(){
+        $('#tabs').tabs();
+
+        $('#dmgslider').slider({
+          range: true,
+          min: 0,
+          max: 100,
+          values: [1,10],
+          slide: function(event,ui)
+          {
+            $('#dmgval').text(ui.values[0] + "-" + ui.values[1]);
+          }
+        });
+
+        $('#intslider').slider({
+          range: true,
+          min: 0,
+          max: 100,
+          values: [1,10],
+          slide: function(event,ui)
+          {
+            $('#intval').text(ui.values[0] + "-" + ui.values[1]);
+          }
+        });
+
+        $('#revisionslider').slider({
+          min: 1,
+          max: 3,
+          value: 3,
+          slide: function(event,ui)
+          {
+            $('#revnum').text(ui.value);
+            $('.revision').hide();
+            $('#rev-' + ui.value).show();
+          }
+        });
+
+        //$('.editable').hallo();
+
+        $('.revision').not(':first').hide();
+
+        $('#chat').submit(function(){
+          var text = $('#message').val();
+          if(text)
+          {
+            if(text == '/take')
+            {
+              if(taken)
+              {
+                $('#msgview').append("<p class='message'>You already have the Ornate Ballpoint Pen</p>");
+              }
+              else
+              {
+                $('#locname').text("Your Inventory");
+                $('#msgview').append("<p class='you message'>Harrison took the Ornate Ballpoint Pen</p>");
+                taken = true;
+              }
+            }
+            else if(text == '/drop')
+            {
+              if(taken)
+              {
+                $('#locname').text("Grand Foyer");
+                $('#msgview').append("<p class='you message'>Harrison put down the Ornate Ballpoint Pen</p>");
+                taken = false;
+              }
+              else
+              {
+                $('#msgview').append("<p class='message'>You can't drop what you don't have!</p>");
+              }
+            }
+            else if(text.indexOf('/') == 0)
+            {
+              $('#msgview').append("<p class='message'>Invalid command</p>");
+            }
+            else
+            {
+              $('#msgview').append("<p class='you'><span class='chatname'>Harrison:</span> " + text + "</p>");
+            }
+
+            $('#message').val("");
+
+            $('#msgview').scrollTop(9999);
+          }
+
+          return false;
+        });
+
+      });
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row" id="player-info">
+        <strong>Harrison</strong> Player 4 / Editor 2 / Review 3
+      </div>
+      <div class="row" style="margin-bottom: 10px;">
+        <div class="col_8">
+          <h1><a id="locname" style="color: #058;" href="index.html">Grand Foyer</a> &raquo; Ornate Ballpoint Pen</h1>
+          <div id="tabs">
+            <ul>
+              <li><a href="#tabs-1">View</a></li>
+              <li><a href="#tabs-2">Edit</a></li>
+              <li><a href="#tabs-3">Review</a></li>
+            </ul>
+            <div id="tabs-1">
+              <p>
+                This pen would probably look a lot nicer if it were a fountain pen, but, with the etched motif running down the sides, it looks pretty great for a ballpoint.  The flat end shares a monogram with the <a href="#" style="color: #660000; font-weight: bold;">towel</a> in the <a href="#" style="color: #000066; font-weight: bold;">bathroom</a>.
+              </p>
+            </div>
+            <div id="tabs-2">
+              <div contenteditable="true" class="editable">This pen would probably look a lot nicer if it were a fountain pen, but, with the etched motif running down the sides, it looks pretty great for a ballpoint.  The flat end shares a monogram with the {towel} in the [bathroom]</div>
+            </div>
+            <div id="tabs-3">
+              <div id="revisionslider"></div>
+              <h3>Revision <span id="revnum">3</span> (<a href="#">+</a>/<a href="#">-</a>) <span style="font-size: .9em;">(<a href="#">flag</a>)</span></h3>
+              <div class="revision" id="rev-3">
+                This pen would probably look a lot nicer if it were a fountain pen, but<span style="color:#900">, with the etched motif running down the sides,</span> it looks pretty great for a ballpoint.  The flat end shares a monogram with the <a href="#" style="color: #660000; font-weight: bold;">towel</a> in the <a href="#" style="color: #000066; font-weight: bold;">bathroom</a>.
+              </div>
+              <div class="revision" id="rev-2">
+                This pen would probably look a lot nicer if it were a fountain pen, but it looks pretty great for a ballpoint.  <span style="color:#900">The flat end shares a monogram with the <a href="#" style="color: #660000; font-weight: bold;">towel</a> in the <a href="#" style="color: #000066; font-weight: bold;">bathroom</a></span>.
+              </div>
+              <div class="revision" id="rev-1">
+                <span style="color:#900">This pen would probably look a lot nicer if it were a fountain pen, but it looks pretty great for a ballpoint.</span>
+              </div>
+            </div>
+          </div>
+           
+        </div>
+
+        <div class="col_4 last">
+          <h2>Attributes</h2>
+          <p><label for="weight">Weight</label><br><input type="text" name="weight" /></p>
+          <p><label for="fixed">Fixed</label><br><input type="checkbox" name="fixed" /></p>
+          <p><label for="dmgslider">Damage (physical): <span id="dmgval">1-10</span></label><br><div id="dmgslider"></div></p>
+          <p><label for="intslider">Damage (mental): <span id="intval">1-10</span></label><br><div id="intslider"></div></p>
+          <p><label for="aliases">Aliases (comma-separated):</label><br><input type="text" style="width: 90%" value="ornate pen,pen" /></p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col_8">
+          <div id="msgview" class="chatbox">
+            <p class="you"><span class="chatname">Harrison:</span> Should this thing be engraved with Wodehouse's name?</p>
+            <p class="other"><span class="chatname">Deepti:</span> I feel like his personal effects wouldn't leave his office</p>
+            <p class="other2 message">Max is looking at the Ornate Ballpoint Pen</p>
+          </div>
+          <form id="chat">
+            <input class="col_7 last" type="text" id="message" /><input type="submit" value="Send" />
+          </form>
+        </div>
+        <div class="col_4 last">
+          <div class="chatbox">
+            <ul>
+              <li class="you chatname">Harrison</li>
+              <li class="other chatname">Deepti</li>
+              <li class="other2 chatname">Max</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

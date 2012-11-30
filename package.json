@@ -1,0 +1,19 @@
+{
+  "name": "wikimud",
+  "description": "",
+  "version": "0.0.0",
+  "main": "./server.js",
+  "dependencies": {
+    "derby": "*",
+    "express": "3.0.0beta4",
+    "gzippo": ">=0.1.7"
+  },
+  "private": true,
+  "subdomain": "harrisonm.wikimud",
+  "scripts": {
+    "start": "server.js"
+  },
+  "engines": {
+    "node": "0.8.x"
+  }
+}
